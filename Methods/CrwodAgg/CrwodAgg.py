@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jan  2 10:34:15 2020
 
-@author: CCRG
-"""
 import numpy as np
 #================================Initialize===================================
 worker_num = 30
