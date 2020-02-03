@@ -11,7 +11,7 @@ from scipy.optimize import minimize
 from scipy.optimize import Bounds
 import time
 from numba import jit
-#利用jit編譯加速 cpu
+
 
 timestart = time.time()
 worker_num = 30
@@ -22,10 +22,6 @@ true_s = np.load("D:\\AISTATS\\Data\\syn\\syn true_s w from x.npy")
 
 
 
-#x為training輸入，y_output的值
-#eta維度為(1,worker_num)
-#s是一個向量，維度為1維(1Xitem_num)
-
 re_coe = 1
 init_s0 = 1
 init_s = np.array(list(range(item_num)))
@@ -33,15 +29,14 @@ init_s = np.array(list(range(item_num)))
 init_eta = np.ones(worker_num)
 epsilon = 0.00001
 #%%
-#@jit(parallel=True)
+
 def re_term(lamb,s0,s):
     to_re = 0
     for i in range(item_num):
         to_re = to_re + (np.log((np.exp(s0)/(np.exp(s0)+np.exp(s[i])))) + np.log((np.exp(s[i])/(np.exp(s0)+np.exp(s[i])))))
     return lamb*to_re
-#@jit(parallel=True)
+
 def obj_fun_s(s):
-    #計算loss
     loss = 0
     regularized_val = re_term(re_coe,init_s0,s)
     for k in range(worker_num):
@@ -53,9 +48,8 @@ def obj_fun_s(s):
                    else:
                        loss = loss + np.log(init_eta[k]*(np.exp(s[j])/(np.exp(s[i])+np.exp(s[j])))+(1-init_eta[k])*(np.exp(s[i])/(np.exp(s[i])+np.exp(s[j]))))
     return -1*(loss+regularized_val)
-#@jit(parallel=True)
+
 def obj_fun_eta(eta):
-    #計算loss
     loss = 0
     regularized_val = re_term(re_coe,init_s0,init_s)
     for k in range(worker_num):
@@ -67,9 +61,8 @@ def obj_fun_eta(eta):
                     else:
                         loss = loss + np.log(eta[k]*(np.exp(init_s[j])/(np.exp(init_s[i])+np.exp(init_s[j])))+(1-eta[k])*(np.exp(init_s[i])/(np.exp(init_s[i])+np.exp(init_s[j]))))
     return -1*(loss+regularized_val)
-#@jit(parallel=True)
+
 def obj_fun(s,eta):
-    #計算loss
     loss = 0
     regularized_val = re_term(re_coe,init_s0,s)
     for k in range(worker_num):
@@ -82,9 +75,6 @@ def obj_fun(s,eta):
     return -1*(loss+regularized_val)
 #%%
 
-#ite = 20
-#@jit
-#def main(init_eta,init_s):
 iter_num = 0
 obj = []
 lb = np.zeros(worker_num)
@@ -116,8 +106,7 @@ while 1:
 timeend = time.time()
 print('Crowd-BT runs:', timeend - timestart)
 #%%
-#np.save('C:\\Users\\Howard\\Desktop\\EM_and_synthetic data\\0726\\s_final', init_s)   
-#%%
+
 
 esti_s0 = []
 esti_s1 = []
