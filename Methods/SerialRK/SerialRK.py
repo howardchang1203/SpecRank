@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jan  2 12:30:09 2020
-
-@author: Howard
-"""
 
 from sklearn.cluster import KMeans
 import numpy as np
