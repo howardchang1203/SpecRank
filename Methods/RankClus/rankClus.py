@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Nov  6 17:01:05 2019
-
-@author: Howard
-"""
 
 from rankFunc import simpleRanking, authorityRanking
 import numpy as np
