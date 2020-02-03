@@ -1,16 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Aug  2 15:08:55 2019
 
-@author: Howard
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 30 17:25:38 2019
-
-@author: Howard
-"""
 from sklearn.cluster import KMeans
 import numpy as np
 import pandas as pd
