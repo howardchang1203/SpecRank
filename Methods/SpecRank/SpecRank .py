@@ -29,8 +29,6 @@ Init = np.load("reform initial 5A.npz")
 train_w = Init["init_w"]
 train_x = Init["init_x"]
 train_beta = Init["init_beta"]
-#categorical分布，每個class發生機率相加必須等於1
-#train_P是一個tuple，總共有item_num個element
 train_P = Init["init_P"]
 '''
 
@@ -47,8 +45,6 @@ for pre_c in range(cluster):
     #train_x[i] = train_x[i]/normvec[i]
     
 train_beta = np.random.random((worker_num,dim+1))
-#categorical分布，每個class發生機率相加必須等於1
-#train_P是一個tuple，總共有item_num個element
 train_P = (np.random.multinomial(100, [1/2.]*2, size=1)/100).reshape(cluster)
 
 true_s = np.load("syn true_s w from x.npy")
@@ -132,13 +128,7 @@ def exp_jointdis(cluster,y_kij,itemi,P,W,X,Beta,item_c_ind):
                                     total_exp = total_exp + (P[c1]*P[c2]*np.log(likelihood_ykij_1(W[c1,:],W[c2,:],X[i,:],X[j,:],Beta[k,:]))) 
                                 else:
                                     total_exp = total_exp + (P[c1]*P[c2]*np.log(likelihood_ykij_0(W[c1,:],W[c2,:],X[i,:],X[j,:],Beta[k,:])))
-    '''                    
-    for i in range(item_num):
-        
-        for c in range(cluster):
-            #第一個P[c]是expectation的值(constant)，第二個P[c]可看成是function變數，可微分找最大值
-            total_exp = total_exp + (P[c]*np.log(P[c]))
-    '''
+
     for i in range(item_num):
         
         if i == itemi:
@@ -149,9 +139,7 @@ def exp_jointdis(cluster,y_kij,itemi,P,W,X,Beta,item_c_ind):
                 total_exp = total_exp + (P[c]*np.log(P[c]))
    
     return total_exp
-           
-#-------------------------計算expectation及posterior---------------------------
-    
+               
 def Q(worker_num,item_num,cluster,observation,train_w,train_x,train_beta,train_P,update_w,update_x,update_beta,update_P,exp_a):
     Expectation_val = 0  
     print("Q")
@@ -548,7 +536,6 @@ while 1:
                     break
 
 #---------------------------update P----------------------------
-    #定義分子
     for c in range(cluster):      
         P_tmp[c] = np.sum(update_expa[:,c])/item_num
         print("P_" + str(c))
